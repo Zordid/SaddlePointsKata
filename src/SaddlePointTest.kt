@@ -19,6 +19,21 @@ class SaddlePointTest {
     }
 
     @Test
+    fun `big array with one saddle point`() {
+        val a = arrayOf(
+                arrayOf(3, 4, 5, 4, 3),
+                arrayOf(2, 3, 4, 3, 2),
+                arrayOf(1, 2, 3, 2, 1),
+                arrayOf(2, 3, 4, 3, 2),
+                arrayOf(3, 4, 5, 4, 3)
+        )
+        val sp = SaddlePointCalc(a)
+        Assert.assertEquals(sp.calculate(), setOf(
+                Coordinate(2, 2)
+        ))
+    }
+
+    @Test
     fun `array with nothing but saddle points`() {
         val a = arrayOf(
                 arrayOf(1, 1, 1),
@@ -26,7 +41,6 @@ class SaddlePointTest {
                 arrayOf(1, 1, 1)
         )
         val sp = SaddlePointCalc(a)
-
         Assert.assertEquals(sp.calculate(), setOf(
                 Coordinate(0, 0),
                 Coordinate(1, 0),
@@ -46,7 +60,6 @@ class SaddlePointTest {
                 arrayOf(0, 42, 0)
         )
         val sp = SaddlePointCalc(a)
-
         Assert.assertEquals(sp.calculate(), setOf(
                 Coordinate(0, 1)
         ))
@@ -60,7 +73,6 @@ class SaddlePointTest {
                 arrayOf(44, 43, 44)
         )
         val sp = SaddlePointCalc(a)
-
         Assert.assertEquals(sp.calculate(), setOf(
                 Coordinate(1, 1)
         ))
