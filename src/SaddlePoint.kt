@@ -15,27 +15,38 @@
  * Team:
  * - Alex, Tim, Olaf
  */
-class SaddlePointCalc(val spArray: Array<Array<Int>>) {
+class SaddlePointCalc(private val spArray: Array<Array<Int>>) {
+
+    // lazily initialized cache for column minimum values
+    private val columnMinimum: IntArray by lazy {
+        val colMin = IntArray(spArray[0].size)
+        for (colIdx in spArray[0].indices) {
+            colMin[colIdx] = spArray.map { it[colIdx] }.min() ?: Int.MIN_VALUE
+        }
+        colMin
+    }
 
     fun calculate(): Set<Coordinate> {
         val result = mutableSetOf<Coordinate>()
 
         for (rowIdx in spArray.indices) {
-            val maxRowValue = spArray[rowIdx].max()
+            val row = spArray[rowIdx]
+            val maxRowValue = row.max()
+
             result.addAll(
-                    spArray[rowIdx].indices
-                            .filter { colIdx -> spArray[rowIdx][colIdx] == maxRowValue }
-                            .filter { colIdx ->
-                                val minColValue = spArray.map { it [colIdx] }.min()
-                                maxRowValue == minColValue
-                            }
+                    // all column indices
+                    row.indices
+                            // only the maximum indices
+                            .filter { colIdx -> row[colIdx] == maxRowValue }
+                            // only the ones being also minimum in its column
+                            .filter { colIdx -> maxRowValue == columnMinimum[colIdx] }
+                            // and mapped to Coordinate
                             .map { colIdx -> Coordinate(rowIdx, colIdx) }
             )
         }
 
         return result
     }
-
 
 }
 
